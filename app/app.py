@@ -14,16 +14,6 @@ login_manager.init_app(app)
 
 app.secret_key = '1GPptoBEczEy1FMUnBCL7g'
 
-# config = {
-#         'user' : 'root',
-#         'password' : 'root',
-#         'host' : 'db',
-#         'port' : '3306',
-#         'database' : 'social_media'
-#     }
-# connection = mysql.connector.connect(**config)
-# connection.close()
-
 @app.before_request
 def bef_request():
     flask.g.db = models.DB
@@ -54,6 +44,9 @@ def index():
     return flask.render_template('index.html')
 
 
+'''
+Defines route to register a new user to the site 
+'''
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if flask.request.method == 'POST':
@@ -82,6 +75,9 @@ def register():
     return flask.render_template('register.html')
 
 
+'''
+Defines route to login page
+'''
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if flask.request.method == 'POST':
@@ -107,6 +103,9 @@ def login():
     return flask.render_template('login.html')
 
 
+'''
+Defines logout route, used through logout buttons in app
+'''
 @app.route('/logout')
 @login_required
 def logout():
@@ -114,6 +113,9 @@ def logout():
     return flask.redirect(flask.url_for('login'))
 
 
+'''
+Used to direct user to create a post page, and adding post to database
+'''
 @app.route('/new_post', methods=['GET', 'POST'])
 @login_required
 def new_post(): 
@@ -128,6 +130,9 @@ def new_post():
     return flask.render_template('new_post.html')
 
 
+'''
+Defines the route displaying the users profile
+'''
 @app.route('/my_profile')
 @login_required
 def my_profile():
@@ -139,6 +144,9 @@ def my_profile():
     return flask.render_template('my_profile.html', posts=user_posts, user=user)
 
 
+'''
+Defines a route to display another users profile, from which they can follow said user
+'''
 @app.route('/profile/<username>')
 @login_required
 def public_profile(username):
@@ -154,6 +162,9 @@ def public_profile(username):
         return flask.redirect(flask.url_for('feed'))
 
 
+'''
+Displays the users feed, including all posts made by the users they are following and their own
+'''
 @app.route('/feed')
 @login_required
 def feed():
@@ -166,6 +177,9 @@ def feed():
     return flask.render_template('feed.html', posts=posts)
 
 
+'''
+Displays all users posts on the app
+'''
 @app.route('/explore')
 @login_required
 def explore():
@@ -173,6 +187,9 @@ def explore():
     return flask.render_template('explore.html', posts=posts)
 
 
+'''
+Defines the route to follow a user, used through follow buttons on accounts in app
+'''
 @app.route('/follow/<username>')
 @login_required
 def follow_user(username):
@@ -185,6 +202,9 @@ def follow_user(username):
     return flask.redirect(flask.url_for('public_profile', username=username))
 
 
+'''
+Defines the route to unfollow a user, used through unfollow button on accounts already following
+'''
 @app.route('/unfollow/<username>')
 @login_required
 def unfollow_user(username):
@@ -200,11 +220,12 @@ def unfollow_user(username):
 dashboard.bind(app)
 
 if __name__ == '__main__':
+    # Init database
     models.init_db()
     # Insert test user 
     try: 
         models.User.create_user(username='xrobbins', email='robbinsx@msoe.edu', password='password', is_admin=True)
     except ValueError:
         print('Test user already exists!')
-
-    app.run(host='0.0.0.0', debug=True)
+    # Run app
+    app.run(host='0.0.0.0')

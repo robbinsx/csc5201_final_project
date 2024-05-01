@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'error' %}
+                    <div style="color: red;">{{ message }}</div>
+                {% elif category == 'info' %}
+                    <div style="color: blue;">{{ message }}</div>
+                {% else %}
+                    {{ message }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form method="POST" action="{{ url_for('login') }}">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <input type="checkbox" onclick="showPass()">Show Password
+        <br><br>
+
+        <button type="submit">Login</button>
+    </form>
+    <br>
+    <div>
+        <p>Dont have an account?</p>
+        <a href="{{ url_for('register') }}"><button>Register Here</button></a>
+    </div>
+
+    <script>
+        function showPass() {
+            var x = document.getElementById("password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+</body>
+</html>

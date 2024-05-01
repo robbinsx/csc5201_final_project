@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+</head>
+<body>
+    <h1>Your Profile</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'error' %}
+                    <div style="color: red;">{{ message }}</div>
+                {% elif category == 'info' %}
+                    <div style="color: blue;">{{ message }}</div>
+                {% else %}
+                    {{ message }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div>
+        <a href="{{ url_for('feed') }}"><button>My Feed</button></a>
+        <br>
+        <a href="{{ url_for('new_post') }}"><button>Create Post</button></a>
+
+        <a href="{{ url_for('logout') }}"><button>Logout</button></a>
+
+        {% if user.admin %}
+            <a href="{{ url_for('dashboard.login') }}"><button>Analytics</button></a>
+        {% endif %}
+</div>
+    <ul>
+        {% for post in posts %}
+        <h3>{{ post.user.username }}</h3>
+        <p>{{ post.content }}</p>
+        <em><p>{{ post.created_at }}</p></em>
+        {% endfor %}
+    </ul>
+</body>
+</html>

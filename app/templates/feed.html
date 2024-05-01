@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feed</title>
+</head>
+<body>
+    <h1>Your Feed</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'error' %}
+                    <div style="color: red;">{{ message }}</div>
+                {% elif category == 'info' %}
+                    <div style="color: blue;">{{ message }}</div>
+                {% else %}
+                    {{ message }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div>
+        <a href="{{ url_for('my_profile') }}"><button>My Profile</button></a>
+        
+        <a href="{{ url_for('new_post') }}"><button>Create Post</button></a>
+
+        <a href="{{ url_for('explore') }}"><button>Explore</button></a>
+
+        <a href="{{ url_for('logout') }}"><button>Logout</button></a>
+    </div>
+    <ul>
+        {% for post in posts %}
+        <h3><a href="{{ url_for('public_profile', username=post.user.username) }}">{{ post.user.username }}</a></h3>
+        <p>{{ post.content }}</p>
+        <em><p>{{ post.created_at }}</p></em>
+        {% endfor %}
+    </ul>
+</body>
+</html>

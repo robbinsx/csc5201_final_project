@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+</head>
+<body>
+    <h1>{{ user.username }}'s Profile</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'error' %}
+                    <div style="color: red;">{{ message }}</div>
+                {% elif category == 'info' %}
+                    <div style="color: blue;">{{ message }}</div>
+                {% else %}
+                    {{ message }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div>
+        <a href="{{ url_for('feed') }}"><button>Back to My Feed</button></a>
+    </div>
+    <br>
+    <div>
+        {% if user in current_user.users_following() %}
+        <a href="{{ url_for('unfollow_user', username=user.username) }}"><button>Unfollow</button></a>
+        {% else %}
+        <a href="{{ url_for('follow_user', username=user.username) }}"><button>Follow</button></a>
+        {% endif %}
+    </div>
+    <ul>
+        {% for post in posts %}
+        <p>{{ post.content }}</p>
+        <em><p>{{ post.created_at }}</p></em>
+        {% endfor %}
+    </ul>
+</body>
+</html>

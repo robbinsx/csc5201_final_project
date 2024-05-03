@@ -1,10 +1,6 @@
 # CSC5201 Final Project
 ## Xavier Robbins 
 
-App link : http://64.23.192.189:5000/
-
----
-
 This GitHub holds the Twitter copy-cat built for my final project of CSC5201. The application provides functionality to post, look at your feed, explore all posts created by all users on the platform, and follow or unfollow users. The application is built in flask with a MySQL database run remotely in a separate docker container. The overall application and associated containers are composed with docker compose and then hosted through digital ocean on a droplet server. The application provides several endpoints representing different portions of the application, described below. 
 
 ---
